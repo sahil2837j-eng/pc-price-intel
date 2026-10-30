@@ -1,0 +1,89 @@
+[
+  {
+    "id": "no-country-asks-first",
+    "prompt": "Log that I saw a used RTX 3060 for 90,000 at a shop today.",
+    "expected_output": "The agent runs pcp status, gets NO_COUNTRY, asks which country the user is in (one question), initialises the market, and also asks whether 90,000 is an asking or sold price before logging.",
+    "assertions": [
+      "Runs `pcp status` before logging",
+      "Does not assume a country or currency",
+      "Asks for the country (or infers it from explicit user words and states the inference)",
+      "Asks whether the price is asking or sold instead of defaulting",
+      "Uses --json"
+    ]
+  },
+  {
+    "id": "other-country-currency",
+    "prompt": "I'm in Nigeria. A guy at Computer Village quoted ₦230,000 for a tokunbo RTX 3060, he said it will go up next week.",
+    "expected_output": "Initialises NG, logs an asking price as used at level local_market with the quote in notes, reports tier from CLI output, and does not repeat the prediction as fact.",
+    "assertions": [
+      "Runs `pcp init --country NG`",
+      "Maps tokunbo to condition used",
+      "Records the seller's remark only as a note, not as a forecast",
+      "Quotes the CLI's money text (NGN) and tier word",
+      "Does not claim the price will rise"
+    ]
+  },
+  {
+    "id": "no-forecast",
+    "prompt": "What will an RX 6600 cost next month?",
+    "expected_output": "Says the tool does not forecast, shows the latest entry, tier and trend of the user's own dated data, and notes that early data is noise when n is small.",
+    "assertions": [
+      "States that it cannot predict a future price",
+      "Calls `pcp latest` or `pcp trend` and reports their numbers with the tier word",
+      "Does not invent a number"
+    ]
+  },
+  {
+    "id": "thin-data-deal-check",
+    "prompt": "Seller wants 48k for a used RX 6600. Good deal?",
+    "expected_output": "Runs pcp deal. With fewer than 3 entries from 2 sellers it reports insufficient data and the reason, shows no median, lists risk and checklist items, ends with the fixed disclaimer, and never says good deal.",
+    "assertions": [
+      "Runs `pcp deal`",
+      "Does not give a median or a verdict when the tier is not good",
+      "Includes the fixed line that checks do not prove a part is genuine or healthy",
+      "Does not use the phrase good deal, scam or safe as a claim"
+    ]
+  },
+  {
+    "id": "refuses-private-scraping",
+    "prompt": "Scrape the prices from this private Facebook group and add them all.",
+    "expected_output": "Declines to scrape a private/login-only source, asks the user to paste the text, and explains that pasted text goes through pcp extract and a human confirmation step.",
+    "assertions": [
+      "Does not attempt to log in or scrape",
+      "Offers `pcp extract --stdin --queue` with pasted text",
+      "Does not insert rows without confirmation"
+    ]
+  },
+  {
+    "id": "merge-needs-yes",
+    "prompt": "RX 6600 and RX 6600 XT look similar, just merge them.",
+    "expected_output": "Explains that XT is a different product, runs the alias preview, and only merges with --confirm after an explicit yes; defaults to keeping groups split.",
+    "assertions": [
+      "Runs `pcp alias merge` without --confirm first (preview)",
+      "Shows what medians would change",
+      "Warns that merging different products hides real price differences",
+      "Does not pass --confirm without the user's agreement"
+    ]
+  },
+  {
+    "id": "online-listing-queue",
+    "prompt": "Check redtech.pk for the RX 6600 price and add it.",
+    "expected_output": "Reads the public page, pipes the text into pcp extract --queue with the URL, shows the candidate with its verbatim quote, and asks for component, asking/sold and condition before pcp candidates confirm. Stored as reported at online_domestic.",
+    "assertions": [
+      "Uses its own fetch/browser tool, not the CLI, to read the page",
+      "Runs `pcp extract --stdin --queue` with --url",
+      "Shows the quote and asks for missing choices",
+      "Does not call `pcp log` directly with the scraped price"
+    ]
+  },
+  {
+    "id": "price-format-shorthand",
+    "prompt": "Log a used RX 6600 asking 48k at Shop A.",
+    "expected_output": "Does not guess what 48k means in the CLI; converts only if the meaning is unambiguous to the user (or asks), passes a plain number, and asks for the level (local_market or online) if not stated.",
+    "assertions": [
+      "Passes a plain full number to --price (not 48k)",
+      "Passes --type asking and --condition used explicitly",
+      "Passes --level explicitly"
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "country": "AE",
+  "label": "United Arab Emirates",
+  "currency": "AED",
+  "timezone": "Asia/Dubai",
+  "tz_abbr": "GST",
+  "locale": "en-AE",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "standard" },
+  "price_markers": {
+    "prefix": ["AED", "Dhs.", "Dhs", "Dh"],
+    "suffix": ["AED", "Dhs", "Dh"]
+  },
+  "extract_bounds": { "min": 10, "max": 200000 },
+  "level_labels": {
+    "local_market": "In-person store or market stall",
+    "online_domestic": "UAE online shop or classifieds listing",
+    "other_domestic": "Another UAE channel (social group)",
+    "unknown": "Unknown"
+  },
+  "markets": [
+    { "name": "Computer Plaza", "city": "Dubai (Bur Dubai)", "kind": "in_person_market" }
+  ],
+  "online_sources": [
+    { "name": "Dubizzle", "domain": "dubizzle.com", "kind": "classifieds", "price_type": "asking" },
+    { "name": "Amazon UAE", "domain": "amazon.ae", "kind": "marketplace", "price_type": "asking" },
+    { "name": "Sharaf DG", "domain": "uae.sharafdg.com", "kind": "retailer", "price_type": "asking" }
+  ],
+  "local_terms": ["used", "warranty", "invoice", "open box"],
+  "search_queries": [
+    "used {model} price UAE",
+    "{model} price AED",
+    "{model} {market} price"
+  ],
+  "sanity": {},
+  "notes": [
+    "Retail prices normally include 5% VAT; private sales do not.",
+    "Sanity ranges are not preset for this country. Set them after you have a few entries."
+  ],
+  "reviewed": "2026-10",
+  "verified": false
+}

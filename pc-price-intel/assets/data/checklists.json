@@ -1,0 +1,65 @@
+{
+  "_comment": "Fixed in-person checklists. Never AI-generated. Shown after every deal check.",
+  "components": {
+    "GPU": [
+      "Physical check: screws not stripped, no rust, no burnt smell, PCB not bent, fan spins freely, ports intact.",
+      "GPU-Z: check name, shader count, memory size/type, BIOS IDs. These are spoofable, treat as weak evidence only.",
+      "FurMark ~15 minutes: watch for artifacts, crashes, or thermal throttling (heat test only, not proof of health).",
+      "Run a real game you know and watch VRAM usage.",
+      "Pay only after testing. Get a written return policy. Never pay advance."
+    ],
+    "CPU": [
+      "Check pins (socket side) for bends or damage.",
+      "Confirm it POSTs in a known-good board.",
+      "Monitor temps under light load."
+    ],
+    "RAM": [
+      "Run MemTest86 for each stick individually.",
+      "Confirm the rated speed is actually achieved, not just installed.",
+      "Test each stick solo to isolate faults."
+    ],
+    "MOTHERBOARD": [
+      "Inspect for bent pins and bulging or leaking capacitors.",
+      "Confirm it POSTs with a known-good CPU and RAM.",
+      "Check all ports function (USB, SATA, display).",
+      "Confirm the BIOS version supports your CPU before buying."
+    ],
+    "PSU": [
+      "Never trust the sticker wattage alone.",
+      "Use a PSU tester at minimum, ideally a real load test.",
+      "Prefer a known, branded PSU over no-name units."
+    ],
+    "SSD": [
+      "Run CrystalDiskInfo (or similar) and check health and power-on hours.",
+      "Do a full write test across the real capacity (watch for fake capacity)."
+    ],
+    "HDD": [
+      "Run CrystalDiskInfo and check reallocated sectors and health.",
+      "Do a full write test across the real capacity (watch for fake capacity)."
+    ],
+    "CASE": [
+      "Physical check: fit, fan mounts, front I/O working.",
+      "Get a receipt and confirm return terms before paying."
+    ],
+    "COOLER": [
+      "Physical check: fits your socket, fan spins freely, no cracked heatpipes.",
+      "Get a receipt and confirm return terms before paying."
+    ],
+    "OTHER": [
+      "Physically inspect the item before paying.",
+      "Get a receipt and confirm return or test terms before paying."
+    ]
+  },
+  "caution_components": ["PSU", "MOTHERBOARD"],
+  "caution_text": "Price says little about quality or variant. Treat with caution.",
+  "test_before_pay": "Always: test before paying, get a written return policy, and never send an advance.",
+  "disclaimer": "These checks help but do not prove a part is genuine or healthy. Test in person before paying.",
+  "compat_user_checklist": [
+    "Socket matches the motherboard.",
+    "RAM generation (DDR3/DDR4/DDR5) matches the motherboard.",
+    "Form factor fits the case.",
+    "PSU wattage and connectors are sufficient.",
+    "BIOS/chipset supports the CPU (check before buying a used board plus a new CPU)."
+  ],
+  "compat_header": "This tool does not verify compatibility. Tick what you checked yourself."
+}

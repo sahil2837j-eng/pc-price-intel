@@ -1,0 +1,42 @@
+{
+  "country": "NG",
+  "label": "Nigeria",
+  "currency": "NGN",
+  "timezone": "Africa/Lagos",
+  "tz_abbr": "WAT",
+  "locale": "en-NG",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "standard" },
+  "price_markers": {
+    "prefix": ["₦", "NGN"],
+    "suffix": ["NGN"]
+  },
+  "extract_bounds": { "min": 500, "max": 50000000 },
+  "level_labels": {
+    "local_market": "In-person computer market or shop (e.g. Computer Village, Ikeja)",
+    "online_domestic": "Nigerian online shop or classifieds listing",
+    "other_domestic": "Another Nigerian city or channel (e.g. WhatsApp group)",
+    "unknown": "Unknown"
+  },
+  "markets": [
+    { "name": "Computer Village", "city": "Ikeja, Lagos", "kind": "in_person_market" }
+  ],
+  "online_sources": [
+    { "name": "Jiji Nigeria", "domain": "jiji.ng", "kind": "classifieds", "price_type": "asking" },
+    { "name": "Jumia Nigeria", "domain": "jumia.com.ng", "kind": "marketplace", "price_type": "asking" },
+    { "name": "Slot", "domain": "slot.ng", "kind": "retailer", "price_type": "asking" }
+  ],
+  "local_terms": ["tokunbo", "UK used", "fairly used", "brand new", "open box"],
+  "search_queries": [
+    "used {model} price in Nigeria",
+    "{model} price Nigeria naira",
+    "{model} {market} price"
+  ],
+  "sanity": {},
+  "notes": [
+    "Condition words matter: record 'tokunbo' / 'UK used' as used and keep the exact wording in notes.",
+    "Exchange-rate moves can shift prices quickly; rely on dated entries.",
+    "Sanity ranges are not preset for this country. Set them after you have a few entries."
+  ],
+  "reviewed": "2026-10",
+  "verified": false
+}

@@ -1,0 +1,61 @@
+{
+  "country": "PK",
+  "label": "Pakistan",
+  "currency": "PKR",
+  "timezone": "Asia/Karachi",
+  "tz_abbr": "PKT",
+  "locale": "en-PK",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "flexible" },
+  "price_markers": {
+    "prefix": ["Rs.", "Rs", "PKR", "₨", "Rupees", "Rupee"],
+    "suffix": ["PKR", "Rs.", "Rs", "/-", "rupees"]
+  },
+  "extract_bounds": { "min": 100, "max": 5000000 },
+  "level_labels": {
+    "local_market": "In-person computer market or shop you visited or phoned (e.g. Saddar Peshawar)",
+    "online_domestic": "Pakistani online shop or classifieds listing",
+    "other_domestic": "Another Pakistani city or channel (e.g. WhatsApp group)",
+    "unknown": "Unknown"
+  },
+  "markets": [
+    { "name": "Saddar computer market", "city": "Peshawar", "kind": "in_person_market", "note": "Reference market this tool was first built for. Prices are only known if typed in." },
+    { "name": "Hafeez Center", "city": "Lahore", "kind": "in_person_market" },
+    { "name": "Saddar computer market", "city": "Karachi", "kind": "in_person_market" },
+    { "name": "Techno City", "city": "Karachi", "kind": "in_person_market" }
+  ],
+  "online_sources": [
+    { "name": "OLX Pakistan", "domain": "olx.com.pk", "kind": "classifieds", "price_type": "asking", "note": "Individual sellers; condition varies; check the seller quote, not the headline." },
+    { "name": "Daraz", "domain": "daraz.pk", "kind": "marketplace", "price_type": "asking" },
+    { "name": "RedTech", "domain": "redtech.pk", "kind": "retailer", "price_type": "asking", "note": "Has a used PC parts category." },
+    { "name": "Dynamic Computer", "domain": "dynamiccomputer.pk", "kind": "retailer", "price_type": "asking", "note": "Has a used graphics cards category." },
+    { "name": "JunaidTech", "domain": "junaidtech.pk", "kind": "retailer", "price_type": "asking" },
+    { "name": "PCPartPicker Pakistan", "domain": "partpickerpakistan.com", "kind": "aggregator", "price_type": "asking", "note": "Aggregates several retailers." },
+    { "name": "Computers Craft", "domain": "computerscraft.pk", "kind": "price_tracker", "price_type": "asking", "note": "Publishes dated hardware price tables." }
+  ],
+  "local_terms": ["pulled out", "imported", "open box", "box pack", "tested", "bill", "warranty card"],
+  "search_queries": [
+    "used {model} price in Pakistan",
+    "{model} price in Pakistan Rs",
+    "{model} {market} price"
+  ],
+  "sanity": {
+    "GPU": { "min": 5000, "max": 250000 },
+    "CPU": { "min": 2000, "max": 120000 },
+    "RAM": { "min": 500, "max": 40000 },
+    "MOTHERBOARD": { "min": 1500, "max": 60000 },
+    "PSU": { "min": 1500, "max": 30000 },
+    "SSD": { "min": 1000, "max": 60000 },
+    "HDD": { "min": 1000, "max": 60000 },
+    "CASE": { "min": 1000, "max": 30000 },
+    "COOLER": { "min": 500, "max": 25000 },
+    "OTHER": { "min": 100, "max": 500000 }
+  },
+  "sanity_note": "Sanity range, not a price claim. Flags only, never blocks.",
+  "notes": [
+    "Shop prices are often quoted cash and by phone or WhatsApp, so the user's own typed quotes are the primary data.",
+    "Online asking prices are a different market from in-person shop quotes. Keep them in their own level (online_domestic).",
+    "Load shedding and exchange-rate moves can shift prices quickly; rely on dated entries, not memory."
+  ],
+  "reviewed": "2026-10",
+  "verified": false
+}

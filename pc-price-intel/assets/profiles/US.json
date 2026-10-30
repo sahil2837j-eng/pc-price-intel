@@ -1,0 +1,45 @@
+{
+  "country": "US",
+  "label": "United States",
+  "currency": "USD",
+  "timezone": "America/New_York",
+  "tz_abbr": null,
+  "tz_note": "The US spans several time zones; set yours with `pcp config set timezone America/Chicago` (or similar).",
+  "locale": "en-US",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "standard" },
+  "price_markers": {
+    "prefix": ["US$", "$", "USD"],
+    "suffix": ["USD"]
+  },
+  "extract_bounds": { "min": 5, "max": 50000 },
+  "level_labels": {
+    "local_market": "In-person store or local meetup/pickup listing",
+    "online_domestic": "US online shop or marketplace listing",
+    "other_domestic": "Another US channel (forum, social group)",
+    "unknown": "Unknown"
+  },
+  "markets": [
+    { "name": "Micro Center", "city": "multiple", "kind": "in_person_retailer", "note": "Physical stores in several metro areas." }
+  ],
+  "online_sources": [
+    { "name": "eBay (sold listings)", "domain": "ebay.com", "kind": "marketplace", "price_type": "sold", "note": "Use completed/sold listings for sold prices; active listings are asking prices." },
+    { "name": "Newegg", "domain": "newegg.com", "kind": "retailer", "price_type": "asking" },
+    { "name": "Amazon", "domain": "amazon.com", "kind": "marketplace", "price_type": "asking" },
+    { "name": "Craigslist", "domain": "craigslist.org", "kind": "classifieds", "price_type": "asking" },
+    { "name": "Facebook Marketplace", "domain": "facebook.com/marketplace", "kind": "classifieds", "price_type": "asking", "note": "Login required; do not automate. Ask the user to paste text." },
+    { "name": "r/hardwareswap", "domain": "reddit.com/r/hardwareswap", "kind": "forum", "price_type": "asking" }
+  ],
+  "local_terms": ["OBO", "firm", "local pickup", "shipped", "open box", "RMA"],
+  "search_queries": [
+    "used {model} price sold",
+    "{model} used price {country}",
+    "{model} ebay sold"
+  ],
+  "sanity": {},
+  "notes": [
+    "Listed prices usually exclude sales tax, which varies by state. Log the listed price and note tax in notes if relevant.",
+    "Sanity ranges are not preset for this country. Set them after you have a few entries."
+  ],
+  "reviewed": "2026-10",
+  "verified": false
+}

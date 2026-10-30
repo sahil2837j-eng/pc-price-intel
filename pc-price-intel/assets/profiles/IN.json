@@ -1,0 +1,47 @@
+{
+  "country": "IN",
+  "label": "India",
+  "currency": "INR",
+  "timezone": "Asia/Kolkata",
+  "tz_abbr": "IST",
+  "locale": "en-IN",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "flexible" },
+  "price_markers": {
+    "prefix": ["₹", "Rs.", "Rs", "INR"],
+    "suffix": ["INR", "Rs.", "Rs", "/-"]
+  },
+  "extract_bounds": { "min": 100, "max": 5000000 },
+  "level_labels": {
+    "local_market": "In-person computer market or shop (e.g. Nehru Place, SP Road, Lamington Road)",
+    "online_domestic": "Indian online shop or classifieds listing",
+    "other_domestic": "Another Indian city or channel",
+    "unknown": "Unknown"
+  },
+  "markets": [
+    { "name": "Nehru Place", "city": "Delhi", "kind": "in_person_market" },
+    { "name": "SP Road", "city": "Bengaluru", "kind": "in_person_market" },
+    { "name": "Lamington Road", "city": "Mumbai", "kind": "in_person_market" },
+    { "name": "Ritchie Street", "city": "Chennai", "kind": "in_person_market" }
+  ],
+  "online_sources": [
+    { "name": "Amazon India", "domain": "amazon.in", "kind": "marketplace", "price_type": "asking" },
+    { "name": "MDComputers", "domain": "mdcomputers.in", "kind": "retailer", "price_type": "asking" },
+    { "name": "Vedant Computers", "domain": "vedantcomputers.com", "kind": "retailer", "price_type": "asking" },
+    { "name": "PrimeABGB", "domain": "primeabgb.com", "kind": "retailer", "price_type": "asking" },
+    { "name": "OLX India", "domain": "olx.in", "kind": "classifieds", "price_type": "asking" },
+    { "name": "Quikr", "domain": "quikr.com", "kind": "classifieds", "price_type": "asking" }
+  ],
+  "local_terms": ["GST bill", "invoice", "warranty", "open box", "second hand", "used"],
+  "search_queries": [
+    "used {model} price in India",
+    "{model} price India Rs",
+    "{model} {market} price"
+  ],
+  "sanity": {},
+  "notes": [
+    "Retail prices usually include GST; ask whether a quoted shop price is with or without a GST invoice, since warranty can depend on the invoice.",
+    "Sanity ranges are not preset for this country. Set them after you have a few entries: `pcp config sanity GPU <min> <max>`."
+  ],
+  "reviewed": "2026-10",
+  "verified": false
+}

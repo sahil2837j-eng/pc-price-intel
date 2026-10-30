@@ -1,0 +1,34 @@
+{
+  "_comment": "Copy to <data dir>/profiles/<CC>.json (or run `pcp profile import this.json`) and edit. Only country, currency and timezone are required; everything else has a safe default. Facts must come from the user or from cited live research, never from memory. Mark verified:true only after checking sources.",
+  "country": "XX",
+  "label": "Country name",
+  "currency": "ISO-4217 code, e.g. USD",
+  "timezone": "IANA zone, e.g. Europe/Paris",
+  "tz_abbr": null,
+  "locale": "BCP-47 locale for number formatting, e.g. en-US",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "standard" },
+  "price_markers": {
+    "prefix": ["symbol or code that appears BEFORE a price"],
+    "suffix": ["symbol or code that appears AFTER a price"]
+  },
+  "extract_bounds": { "min": 1, "max": 1000000000 },
+  "level_labels": {
+    "local_market": "In-person market/shop the user visits",
+    "online_domestic": "Domestic online listing or shop",
+    "other_domestic": "Another domestic channel",
+    "unknown": "Unknown"
+  },
+  "markets": [
+    { "name": "market name", "city": "city", "kind": "in_person_market", "note": "" }
+  ],
+  "online_sources": [
+    { "name": "site name", "domain": "example.com", "kind": "classifieds|marketplace|retailer|aggregator|price_tracker|forum", "price_type": "asking|sold", "note": "" }
+  ],
+  "local_terms": ["words sellers use for condition, warranty, import status"],
+  "search_queries": ["used {model} price in {country}", "{model} {market} price"],
+  "sanity": { "GPU": { "min": 0, "max": 0 } },
+  "sanity_note": "Sanity range, not a price claim.",
+  "notes": ["taxes, warranty customs, seasonal patterns the agent verified"],
+  "reviewed": "YYYY-MM",
+  "verified": false
+}

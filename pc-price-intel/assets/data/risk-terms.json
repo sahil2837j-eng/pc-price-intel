@@ -1,0 +1,19 @@
+[
+  { "term": "advance", "severity": "high" },
+  { "term": "token money", "severity": "high" },
+  { "term": "no return", "severity": "high" },
+  { "term": "no warranty", "severity": "medium" },
+  { "term": "as is", "severity": "medium" },
+  { "term": "untested", "severity": "high" },
+  { "term": "not tested", "severity": "high" },
+  { "term": "dead", "severity": "high" },
+  { "term": "not working", "severity": "high" },
+  { "term": "repaired", "severity": "medium" },
+  { "term": "reballed", "severity": "high" },
+  { "term": "baked", "severity": "high" },
+  { "term": "mining", "severity": "medium" },
+  { "term": "urgent", "severity": "low" },
+  { "term": "no testing", "severity": "high" },
+  { "term": "no refund", "severity": "high" },
+  { "term": "cash only", "severity": "low" }
+]

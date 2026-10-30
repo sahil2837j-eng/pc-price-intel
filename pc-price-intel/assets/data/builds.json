@@ -1,0 +1,52 @@
+{
+  "_comment": "Starting ideas, not recommendations. No prices, no shops, no keys. Part hints are search tokens only; edit them for what is common in your market and era.",
+  "note": "Starting idea, not a recommendation. Compare against newer alternatives using your own logged, dated prices.",
+  "question": "Does this baseline still offer value vs newer alternatives? Answer only from logged dated data.",
+  "presets": [
+    {
+      "name": "light",
+      "title": "Everyday PC",
+      "blurb": "Browsing, office work, light games.",
+      "parts": [
+        { "component": "CPU", "label": "4th-gen Intel i5 class (e.g. i5-4460)", "hint": "i5 4460" },
+        { "component": "MOTHERBOARD", "label": "H81 class board", "hint": "h81" },
+        { "component": "RAM", "label": "8GB DDR3", "hint": "8gb ddr3" },
+        { "component": "PSU", "label": "Branded 400W PSU", "hint": "400w" },
+        { "component": "CASE", "label": "Basic case", "hint": "case" },
+        { "component": "SSD", "label": "120GB SSD", "hint": "120gb ssd" },
+        { "component": "GPU", "label": "GTX 750 Ti class", "hint": "gtx 750 ti" }
+      ]
+    },
+    {
+      "name": "heavy",
+      "title": "1080p gaming",
+      "blurb": "Solid 1080p gaming and work PC from the used market.",
+      "parts": [
+        { "component": "CPU", "label": "4th-gen Intel i7 class (e.g. i7-4770)", "hint": "i7 4770" },
+        { "component": "MOTHERBOARD", "label": "B85 class board", "hint": "b85" },
+        { "component": "RAM", "label": "16GB DDR3", "hint": "16gb ddr3" },
+        { "component": "PSU", "label": "Branded 500W PSU", "hint": "500w" },
+        { "component": "CASE", "label": "Mid-tower case", "hint": "mid tower case" },
+        { "component": "SSD", "label": "240GB SSD", "hint": "240gb ssd" },
+        { "component": "GPU", "label": "RX 6600 8GB", "hint": "rx 6600" }
+      ]
+    },
+    {
+      "name": "beast",
+      "title": "1440p / heavy work",
+      "blurb": "High-end used build for 1440p gaming, editing and heavy multitasking.",
+      "parts": [
+        { "component": "CPU", "label": "Modern 6-core (e.g. Ryzen 5 3600)", "hint": "ryzen 5 3600" },
+        { "component": "MOTHERBOARD", "label": "B450 class board", "hint": "b450" },
+        { "component": "RAM", "label": "16GB DDR4 (2x8GB)", "hint": "2x8gb ddr4" },
+        { "component": "PSU", "label": "Branded 650W PSU", "hint": "650w" },
+        { "component": "CASE", "label": "Gaming case with airflow", "hint": "gaming case" },
+        { "component": "SSD", "label": "500GB NVMe SSD", "hint": "500gb nvme" },
+        { "component": "GPU", "label": "RX 6700 XT class", "hint": "rx 6700 xt" }
+      ]
+    }
+  ],
+  "static_notes": [
+    "Haswell supports AVX2 but limits you to DDR3 with no upgrade path. Compare against newer used alternatives using your logged prices."
+  ]
+}

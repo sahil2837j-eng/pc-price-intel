@@ -1,0 +1,41 @@
+{
+  "country": "GB",
+  "label": "United Kingdom",
+  "currency": "GBP",
+  "timezone": "Europe/London",
+  "tz_abbr": null,
+  "locale": "en-GB",
+  "number_format": { "thousands": ",", "decimal": ".", "grouping": "standard" },
+  "price_markers": {
+    "prefix": ["£", "GBP"],
+    "suffix": ["GBP"]
+  },
+  "extract_bounds": { "min": 5, "max": 50000 },
+  "level_labels": {
+    "local_market": "In-person store or local pickup listing",
+    "online_domestic": "UK online shop or marketplace listing",
+    "other_domestic": "Another UK channel (forum, social group)",
+    "unknown": "Unknown"
+  },
+  "markets": [],
+  "online_sources": [
+    { "name": "eBay UK", "domain": "ebay.co.uk", "kind": "marketplace", "price_type": "sold", "note": "Use sold items for sold prices." },
+    { "name": "CEX", "domain": "uk.webuy.com", "kind": "retailer", "price_type": "asking", "note": "Second-hand retail with a stated warranty." },
+    { "name": "Scan", "domain": "scan.co.uk", "kind": "retailer", "price_type": "asking" },
+    { "name": "Overclockers UK", "domain": "overclockers.co.uk", "kind": "retailer", "price_type": "asking" },
+    { "name": "Gumtree", "domain": "gumtree.com", "kind": "classifieds", "price_type": "asking" }
+  ],
+  "local_terms": ["collection only", "ono", "open box", "refurbished"],
+  "search_queries": [
+    "used {model} price UK",
+    "{model} sold ebay.co.uk",
+    "{model} price {country}"
+  ],
+  "sanity": {},
+  "notes": [
+    "Consumer retail prices normally include VAT; private sales do not. Do not mix the two in one conclusion without saying so.",
+    "Sanity ranges are not preset for this country. Set them after you have a few entries."
+  ],
+  "reviewed": "2026-10",
+  "verified": false
+}
