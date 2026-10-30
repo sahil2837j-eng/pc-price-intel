@@ -2,11 +2,12 @@
 name: pc-price-intel
 description: Country-agnostic price intelligence for new and used PC parts (GPU, CPU, RAM, motherboard, PSU, SSD, HDD, case, cooler) in any market. Use when the user wants to log a price they saw or were quoted, find the latest price or median for a part, check whether an asking price is typical, compare Light, Heavy or Beast builds, pull prices out of pasted or fetched listings, or keep an auditable local price history. The agent picks the user's country once (currency, time zone, markets and sources come from a profile) and a zero-dependency Node CLI does all arithmetic, so numbers are never guessed. Never predicts prices, never claims a part is genuine or safe, and collected prices wait for human confirmation.
 license: MIT
-compatibility: Requires Node.js 18 or newer with no npm dependencies. The CLI makes no network requests and works offline; the agent's own search, fetch or browser tools do any web collection. User data is stored outside the skill folder.
+compatibility: Requires Node.js 18 or newer with no npm dependencies. The core CLI (scripts/pcp.mjs) makes no network requests and works offline. The optional tools/collect.mjs is a separate, explicit one-page collector; it queues candidates and never confirms. User data is stored outside the skill folder.
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   scope: "global, country chosen at runtime"
   cli: "scripts/pcp.mjs"
+  collector: "tools/collect.mjs"
   standard: "Agent Skills (SKILL.md)"
 ---
 
@@ -24,7 +25,7 @@ Always add `--json`. Every money field comes as `x_minor` (integer minor units) 
 | It is | It is not |
 | --- | --- |
 | A local price log with instant feedback (tier, median, "needs N more sellers") | A price predictor. It never forecasts |
-| An identity normaliser (`RX6600 8GB` = `Sapphire Pulse RX 6600`) | A scraper. The CLI has no network code at all |
+| An identity normaliser (`RX6600 8GB` = `Sapphire Pulse RX 6600`) | A scraper. The core CLI has no network code; the optional `tools/collect.mjs` only runs when explicitly invoked and only queues candidates |
 | A median / tier / trend / build-total calculator | An authenticity checker. "Genuine" and "safe" are banned claims |
 | A review queue for prices collected online | A seller messenger, auto-buyer, or listing poster |
 
@@ -92,13 +93,20 @@ known-only subtotal. Asking and sold totals are separate. Show the compatibility
 ticks**; never claim a build is compatible.
 
 ### 5. Collect from the web (only when the user asks)
-You do the browsing with your own tools (search, fetch, browser); the CLI never touches the network. Find sources from the
-profile (`online_sources`, `search_queries`), read **public** pages only, then pipe the text in:
+You do the browsing with your own tools (search, fetch, browser); the core CLI never touches the network. Find sources
+from the profile (`online_sources`, `search_queries`), read **public** pages only, then pipe the text in:
 `pcp extract --stdin --queue --source <site> --url <url> --name "<model>" --component GPU`.
+
+For a one-page OLX / Amazon / Alibaba product check, the separate optional collector can do the fetch and parse for you;
+its exact flags and source rules are in `references/collection.md`. It fetches one public page, prints the rows, and
+queues them with `pcp candidates add`. It refuses Daraz search (`/catalog/` is disallowed by robots.txt) and Alibaba
+search (`/trade/` is disallowed and CAPTCHA-protected); Daraz is manual JSON import only, and Alibaba is product-detail
+reference only. It never confirms.
+
 Prices must appear verbatim; each candidate keeps a quote. Nothing is in statistics until the user chooses
 component, type and condition and you run `pcp candidates confirm`. Confirmed rows are stored as `reported` at
-`online_domestic` so they never mix with in-person shop quotes. Foreign-currency numbers stay reference-only. Rules
-and per-tool recipes: `references/collection.md`.
+`online_domestic` so they never mix with in-person shop quotes. Foreign-currency numbers and Alibaba/Amazon reference
+rows stay reference-only. Rules and per-tool recipes: `references/collection.md`.
 
 ### 6. Aliases (merging two model groups)
 `pcp alias suggest` is display-only. `pcp alias merge --alias K --into K` previews what medians would change and

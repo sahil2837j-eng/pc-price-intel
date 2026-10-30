@@ -3,9 +3,10 @@
 // confirms. Confirmed rows are stored as evidence "reported" at the "online_domestic" level
 // by default, so they form their own groups and never mix with in-person shop quotes.
 
-import { COMPONENTS, CONDITIONS, LEVELS, PRICE_TYPES } from "./consts.mjs";
+import { COMPONENTS, CONDITIONS, EVIDENCE, LEVELS, PRICE_TYPES } from "./consts.mjs";
 import { PcpError } from "./errors.mjs";
 import { cleanListingTitle, extractPrices, guessName } from "./extract.mjs";
+import { currencyDecimals } from "./money.mjs";
 import { logObservation } from "./observations.mjs";
 import { ev } from "./store.mjs";
 
@@ -25,6 +26,10 @@ export function addCandidates(ctx, inputs, state = ctx.store.state()) {
         currency: String(c.currency || ctx.profile.currency).toUpperCase().slice(0, 3),
         price_type: c.price_type && PRICE_TYPES.includes(c.price_type) ? c.price_type : null,
         condition: c.condition && CONDITIONS.includes(c.condition) ? c.condition : null,
+        seller: c.seller ? String(c.seller).slice(0, 120) : null,
+        location: c.location ? String(c.location).slice(0, 120) : null,
+        evidence: c.evidence && EVIDENCE.includes(c.evidence) ? c.evidence : null,
+        level: c.level && LEVELS.includes(c.level) ? c.level : null,
         quote: c.quote ? String(c.quote).slice(0, 500) : null,
       }),
     );
@@ -50,24 +55,33 @@ export function candidatesFromText(ctx, { text, source, url, name, component, pa
 export function confirmCandidate(ctx, id, choice, state = ctx.store.state()) {
   const c = state.candById.get(Number(id));
   if (!c || c.status !== "pending") throw new PcpError("NOT_FOUND", `Candidate ${id} not found or already decided.`);
-  if (c.currency !== ctx.profile.currency) {
-    throw new PcpError("REFERENCE_ONLY", `Candidate ${id} is in ${c.currency}, not ${ctx.profile.currency}. It can only be kept as a reference.`, "Use `pcp log --evidence reference --currency ...` if you want to keep it as a benchmark row.");
+  const foreign = c.currency !== ctx.profile.currency;
+  const evidence = choice.evidence || c.evidence || "reported";
+  if (!["reported", "reference"].includes(evidence)) {
+    throw new PcpError("VALIDATION", "Candidate evidence must be reported or reference.", "A web listing is never evidence of a completed sale.");
   }
-  const level = choice.level && LEVELS.includes(choice.level) ? choice.level : "online_domestic";
+  if (foreign && evidence !== "reference") {
+    throw new PcpError("REFERENCE_ONLY", `Candidate ${id} is in ${c.currency}, not ${ctx.profile.currency}. It can only be kept as a reference.`, "Add --evidence reference to keep it as a benchmark row, or log it yourself with pcp log --evidence reference.");
+  }
+  const level = choice.level && LEVELS.includes(choice.level) ? choice.level : c.level && LEVELS.includes(c.level) ? c.level : "online_domestic";
   const note = [`Collected via ${c.source}`, c.quote ? `Quote: "${c.quote}"` : null].filter(Boolean).join(" · ");
-  const major = c.price_minor / 10 ** ctx.profile.decimals;
+  const decimals = foreign ? currencyDecimals(c.currency) : ctx.profile.decimals;
+  const major = c.price_minor / 10 ** decimals;
   const res = logObservation(
     ctx,
     {
       component: choice.component || c.component,
       name: choice.name || c.raw_name,
       price: major,
+      currency: c.currency,
       type: choice.type || c.price_type,
       condition: choice.condition || c.condition,
       level,
       date: choice.date,
+      seller: choice.seller || c.seller,
+      location: choice.location || c.location,
       notes: note,
-      evidence: "reported",
+      evidence,
       source: c.source_url,
     },
     state,

@@ -1,4 +1,4 @@
-export const VERSION = "1.0.0";
+export const VERSION = "1.1.0";
 
 export const COMPONENTS = ["GPU", "CPU", "RAM", "MOTHERBOARD", "PSU", "SSD", "HDD", "CASE", "COOLER", "OTHER"];
 export const ITEM_KINDS = ["single", "kit", "bundle"];

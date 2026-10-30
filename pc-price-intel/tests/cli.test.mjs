@@ -187,6 +187,60 @@ test("candidates: queue, human choices required, PKR confirmed as reported/onlin
   assert.equal(run(["extract", "--text", "nothing priced here"], { dir }).json.found.length, 0);
 });
 
+test("candidates preserve seller/location and can be confirmed as a reference", () => {
+  const dir = market();
+  const file = path.join(dir, "rows.json");
+  fs.writeFileSync(
+    file,
+    JSON.stringify([
+      {
+        name: "Reference GPU 8GB",
+        price: 100,
+        currency: "USD",
+        component: "GPU",
+        type: "asking",
+        condition: "new",
+        seller: "Acme",
+        location: "Online",
+        evidence: "reference",
+        level: "unknown",
+        quote: "Reference GPU 8GB · USD 100 · Acme",
+        url: "https://example.com/reference-gpu",
+      },
+      {
+        name: "Foreign GPU 8GB",
+        price: 120,
+        currency: "USD",
+        component: "GPU",
+        type: "asking",
+        condition: "used",
+        seller: "Beta",
+        location: "Online",
+        level: "online_domestic",
+        quote: "Foreign GPU 8GB · USD 120 · Beta",
+        url: "https://example.com/foreign-gpu",
+      },
+    ]),
+  );
+  const add = run(["candidates", "add", "--file", file], { dir }).json;
+  assert.equal(add.queued_ids.length, 2);
+  const rows = run(["candidates", "list"], { dir }).json.rows;
+  const c = rows.find((r) => r.raw_name === "Reference GPU 8GB");
+  const foreign = rows.find((r) => r.raw_name === "Foreign GPU 8GB");
+  assert.equal(c.seller, "Acme");
+  assert.equal(c.location, "Online");
+  assert.equal(c.evidence, "reference");
+  assert.equal(c.level, "unknown");
+  assert.equal(run(["candidates", "confirm", String(foreign.id), "--component", "GPU", "--type", "asking", "--condition", "used"], { dir }).json.error.code, "REFERENCE_ONLY");
+  const ok = run(["candidates", "confirm", String(foreign.id), "--component", "GPU", "--type", "asking", "--condition", "used", "--evidence", "reference", "--seller", "Beta", "--location", "Online"], { dir }).json;
+  assert.equal(ok.record.evidence, "reference");
+  assert.equal(ok.record.level, "online_domestic");
+  assert.equal(ok.record.currency, "USD");
+  assert.equal(ok.record.seller, "Beta");
+  assert.equal(ok.record.location, "Online");
+  assert.equal(run(["groups"], { dir }).json.groups.length, 0, "reference rows never enter statistics");
+});
+
 test("alias merge needs an explicit --confirm and is reversible; unrelated components refused", () => {
   const dir = market();
   threeGpu(dir, "RX 6600", 46000);

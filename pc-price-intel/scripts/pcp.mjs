@@ -114,7 +114,7 @@ function groupFeedback(ctx, event) {
 
 const slimRow = (o, superseded) => ({
   id: o.id, uuid: o.uuid, date: o.observed_date, component: o.component, name: o.raw_name, model_key: o.model_key, kind: o.item_kind,
-  price_minor: o.price_minor, currency: o.currency, type: o.price_type, condition: o.condition, seller: o.seller, level: o.location_level,
+  price_minor: o.price_minor, currency: o.currency, type: o.price_type, condition: o.condition, seller: o.seller, location: o.location, level: o.location_level,
   evidence: o.evidence, sanity_flag: o.sanity_flag, sanity_override: o.sanity_override, status: rowStatus(o, superseded), notes: o.notes,
 });
 
@@ -417,7 +417,7 @@ C.candidates = ({ pos, flags }) => {
   if (sub === "list") {
     const status = flags.status || "pending";
     const rows = st.candidates.filter((c) => c.status === status);
-    return { data: { status, rows }, text: table(rows, [{ label: "#", key: "id" }, { label: "Source", key: "source" }, { label: "Model", key: "raw_name" }, { label: "Price", get: (c) => (c.currency === ctx.profile.currency ? money(ctx, c.price_minor) : `${c.currency} ${c.price_minor} minor (reference)`) }, { label: "Quote", get: (c) => (c.quote || "").slice(0, 50) }]) };
+    return { data: { status, rows }, text: table(rows, [{ label: "#", key: "id" }, { label: "Source", key: "source" }, { label: "Model", key: "raw_name" }, { label: "Price", get: (c) => { const dec = currencyDecimals(c.currency); return c.currency === ctx.profile.currency ? money(ctx, c.price_minor) : `${c.currency} ${(c.price_minor / 10 ** dec).toFixed(dec)} (reference)`; } }, { label: "Seller", get: (c) => c.seller || "—" }, { label: "Quote", get: (c) => (c.quote || "").slice(0, 50) }]) };
   }
   if (sub === "add") {
     const items = [];
@@ -429,14 +429,15 @@ C.candidates = ({ pos, flags }) => {
       const cur = String(r.currency || ctx.profile.currency).toUpperCase();
       const dec = cur === ctx.profile.currency ? ctx.profile.decimals : new Intl.NumberFormat("en", { style: "currency", currency: cur }).resolvedOptions().maximumFractionDigits;
       const major = typeof r.price === "number" ? r.price : parsePriceInput(r.price, ctx.profile);
-      return { source: flags.source || r.source || "agent", source_url: r.url || r.source_url, component: r.component, raw_name: r.name || r.raw_name, price_minor: toMinor(major, dec), currency: cur, price_type: r.type || r.price_type, condition: r.condition, quote: r.quote };
+      return { source: flags.source || r.source || "agent", source_url: r.url || r.source_url, component: r.component, raw_name: r.name || r.raw_name, price_minor: toMinor(major, dec), currency: cur, price_type: r.type || r.price_type, condition: r.condition, seller: r.seller, location: r.location, evidence: r.evidence, level: r.level, quote: r.quote };
     });
     const ids = addCandidates(ctx, inputs, st);
     return { data: { queued_ids: ids }, text: `Queued ${ids.length} candidate(s). A human must confirm them.` };
   }
   if (sub === "confirm") {
-    const res = confirmCandidate(ctx, pos[2], { component: flags.component, type: flags.type, condition: flags.condition, level: flags.level, date: flags.date, name: flags.name }, st);
-    return { data: { record: slimRow(res.event, new Set()) }, text: `● Confirmed → saved #${res.event.id} as reported / ${res.event.location_level}.` };
+    const res = confirmCandidate(ctx, pos[2], { component: flags.component, type: flags.type, condition: flags.condition, level: flags.level, date: flags.date, name: flags.name, seller: flags.seller, location: flags.location, evidence: flags.evidence }, st);
+    const kind = res.event.evidence === "reference" ? "reference" : "reported";
+    return { data: { record: slimRow(res.event, new Set()) }, text: `● Confirmed → saved #${res.event.id} as ${kind} / ${res.event.location_level}.` };
   }
   if (sub === "discard") {
     const c = discardCandidate(ctx, pos[2], st);

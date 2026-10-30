@@ -35,7 +35,7 @@ Then restart the agent (or begin a new session) so it re-scans skills, and verif
 cp -r pc-price-intel ~/.agents/skills/            # macOS / Linux
 Copy-Item -Recurse pc-price-intel $HOME\.agents\skills\   # Windows PowerShell
 ```
-Or download the release archive (`pc-price-intel-v1.0.0.tar.gz`) and unpack it into the skills folder.
+Or download the release archive (`pc-price-intel-v1.1.0.tar.gz`) and unpack it into the skills folder.
 
 ## Permissions (opencode)
 To require approval before the skill loads, in `opencode.json`:

@@ -75,9 +75,19 @@ Spec file: `{"name":"mine","parts":[{"component":"GPU","label":"..","match":"rx 
 | --- | --- |
 | `pcp extract (--text ".." \| --file f \| --stdin) [--queue] [--source s --url u --name n --component C --pattern "regex"]` | Finds prices that appear verbatim, with quotes. HTML is reduced to text. `--pattern` is a regex with ONE capture group for the number. Without `--queue` nothing is stored |
 | `pcp candidates list [--status pending\|confirmed\|discarded]` | The review queue |
-| `pcp candidates add --name n --price p [--currency --component --type --condition --quote --url --source]` or `--file rows.json` | Queue structured rows (max 50) |
-| `pcp candidates confirm <id> --component C --type T --condition X [--level L --date D --name N]` | Saves an observation with evidence `reported`, level `online_domestic` unless set |
+| `pcp candidates add --name n --price p [--currency --component --type --condition --quote --url --source --seller --location --evidence --level]` or `--file rows.json` | Queue structured rows (max 50). `seller`/`location` are preserved for distinct-seller tiering; `evidence reference` marks a benchmark row |
+| `pcp candidates confirm <id> --component C --type T --condition X [--level L --date D --name N --seller S --location L --evidence reported\\|reference]` | Saves an observation. Defaults to evidence `reported`, level `online_domestic`; a foreign-currency row requires `--evidence reference` |
 | `pcp candidates discard <id>` | Drop it |
+
+Optional one-page collector (separate from the core CLI; explicit invocation only):
+
+`node <skill folder>/tools/collect.mjs <olx|amazon|daraz|alibaba> ...`
+
+- `olx`: one public search page; seller is not on the search card, so pass `--seller` at confirm time.
+- `amazon`: one public search page; reference-only by default (excluded from statistics).
+- `daraz`: manual saved JSON only; robots.txt disallows `/catalog/`.
+- `alibaba`: product-detail page only; search `/trade/` is disallowed and CAPTCHA-protected; wholesale/MOQ reference only.
+- The collector queues candidates and prints rows; it never confirms. Use `--queue` explicitly.
 
 ## Data and identity
 

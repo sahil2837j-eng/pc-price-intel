@@ -11,7 +11,7 @@ unrelated collection sub-skills are **not** included here.
   a country profile.
 - A zero-dependency Node CLI (`pcp`) does all arithmetic. Medians, tiers, trends, and build totals are computed, never
   guessed.
-- No network code. No silent scraping. Collected prices wait in a review queue until the user confirms them.
+- The **core CLI has no network code**. An optional one-page collector (`tools/collect.mjs`) runs only when explicitly invoked, respects robots.txt, and queues candidates for review. No silent scraping.
 - No price predictions. No claims that a used part is genuine, safe, or compatible.
 
 ## Install
@@ -45,7 +45,7 @@ node ~/.agents/skills/pc-price-intel/scripts/pcp.mjs doctor
 
 ### Release archive
 
-Each release includes `pc-price-intel-v1.0.0.tar.gz` and `.zip` containing the `pc-price-intel/` folder. Unpack it
+Each release includes `pc-price-intel-v1.1.0.tar.gz` and `.zip` containing the `pc-price-intel/` folder. Unpack it
 into your agent's skills directory if you do not want to clone the repository.
 
 ## How an agent uses it
@@ -68,12 +68,48 @@ pcp build total --preset heavy --condition used --json
 The CLI is the source of truth. An agent should quote the CLI's `*_text` money fields, report the tier with every
 number, and say **"insufficient data"** when the tier is not `good`.
 
+## Optional one-page collector
+
+The core CLI stays offline. When the user explicitly asks for a current public-page check, the separate collector
+fetches **one** page, parses the rows, and sends them to the review queue:
+
+```bash
+# OLX Pakistan public search page (used/asking; seller is not on the search card)
+node pc-price-intel/tools/collect.mjs olx --query "rx 6600" --component GPU \
+  --require "rx\\s*6600" --exclude "xt|bundle|full pc|mobo" --max 10 --queue
+
+# Amazon.com public search page (reference-only by default)
+node pc-price-intel/tools/collect.mjs amazon --query "rx 6600" --component GPU \
+  --require "rx\\s*6600" --exclude "xt" --max 10 --queue
+
+# Daraz: manual saved JSON only; robots.txt disallows /catalog/
+node pc-price-intel/tools/collect.mjs daraz --file daraz-search.json --component GPU \
+  --require "rx\\s*6600" --exclude "xt"
+
+# Alibaba: product-detail page only (search is CAPTCHA-protected and /trade/ is disallowed)
+node pc-price-intel/tools/collect.mjs alibaba --url "https://www.alibaba.com/product-detail/..." \
+  --component GPU --max 1
+```
+
+Source rules:
+
+| Source | Automated search | What the rows mean |
+| --- | --- | --- |
+| OLX Pakistan | Public search page allowed | Local used/asking listings, not sold prices |
+| Amazon.com | Public search page allowed | Retail/import **reference**; excluded from statistics |
+| Daraz Pakistan | **No**: `robots.txt` disallows `/catalog/` | Manual saved JSON/search page only |
+| Alibaba | **No search**: `/trade/` disallowed and CAPTCHA-protected; product-detail pages allowed | Wholesale/MOQ **reference**; not a local retail or used price |
+
+The collector never confirms a row. `pcp candidates list` shows the review queue; the user chooses component, type and
+condition before `pcp candidates confirm`. Seller names on OLX/Amazon search cards are absent by design, so open the
+listing URL and pass `--seller` when confirming if you need distinct-seller tiering.
+
 ## What it does
 
 | It is | It is not |
 | --- | --- |
 | A local price log with tier, median, and "needs N more sellers" feedback | A price predictor |
-| An identity normalizer (`RX6600 8GB` = `Sapphire Pulse RX 6600`) | A scraper; the CLI has no network code |
+| An identity normalizer (`RX6600 8GB` = `Sapphire Pulse RX 6600`) | A scraper; the core CLI has no network code, and the optional collector only fetches one explicit public page |
 | A median / tier / trend / build-total calculator | An authenticity checker |
 | A review queue for prices collected online | A seller messenger, auto-buyer, or listing poster |
 
@@ -96,11 +132,12 @@ pc-price-intel/
     ├── SKILL.md                 agent instructions and activation metadata
     ├── references/              commands, methodology, profiles, collection, data model, install, troubleshooting
     ├── scripts/pcp.mjs          the CLI + scripts/lib/*.mjs (zero dependencies, no network)
+    ├── tools/collect.mjs        optional, explicit one-page public collector (queues candidates)
     ├── assets/
     │   ├── data/                token lists, risk terms, checklists, build presets, country table
     │   └── profiles/            PK, IN, BD, US, GB, AE, NG + a template
     ├── evals/evals.json         behaviour checks for agents
-    └── tests/                   70 tests: logic, CLI, installer, spec lint, guards
+    └── tests/                   77 tests: logic, CLI, collector parsers, installer, spec lint, guards
 ```
 
 User data lives outside the skill folder, under the user's data directory. `pcp doctor` shows the path; override it
